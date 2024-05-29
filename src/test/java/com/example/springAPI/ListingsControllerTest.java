@@ -15,22 +15,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestControllerTest {
+public class ListingsControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @Test
-    public void getHello() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
+    public void listings() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/listings").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Hello world!")));
-    }
-
-    @Test
-    public void getListings() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/getListings").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("A ECE 340 textbook, an office chair, and a monitor!")));
+                .andExpect(content().string(equalTo("{\"success\":true,\"listings\":[{\"id\":2167,\"userId\":\"user_6723722\",\"name\":\"Office chair\",\"askingPrice\":20.0},{\"id\":7323,\"userId\":\"user_1562722\",\"name\":\"ECE 340 Textbook\",\"askingPrice\":22.0},{\"id\":3425,\"userId\":\"user_7865375\",\"name\":\"Keyboard\",\"askingPrice\":15.0},{\"id\":9234,\"userId\":\"user_7458744\",\"name\":\"Couch\",\"askingPrice\":40.0},{\"id\":2562,\"userId\":\"user_9345643\",\"name\":\"Plates\",\"askingPrice\":12.5}]}")));
     }
 }
