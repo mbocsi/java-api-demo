@@ -3,6 +3,7 @@ package com.example.springAPI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,19 +28,23 @@ public class ListingsController {
     @GetMapping("")
     public ResponseEntity<ListingsResponse> listings() {
         ListingsResponse response = new ListingsResponse();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
         for(Listing listing: this.data) {
             response.appendListing(listing);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, responseHeaders, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Listing> listing(@PathVariable("id") long id) {
+    public ResponseEntity<ListingResponse> listing(@PathVariable("id") long id) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
         for(Listing l: this.data){
             if(l.id() == id) {
-                return new ResponseEntity<>(l, HttpStatus.OK);
+                return new ResponseEntity<>(new ListingResponse(true, l), responseHeaders, HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(responseHeaders, HttpStatus.NOT_FOUND);
     }
 }

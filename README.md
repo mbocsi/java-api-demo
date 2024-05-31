@@ -4,7 +4,7 @@ A RESTful API made using Oracle JDK 22 and Springboot. This is a test API for ge
 
 ## Running the server for dev
 
-`./mvnw spring:run`
+`./mvnw spring-boot:run`
 
 ## Building a jar file
 
@@ -13,7 +13,7 @@ installs into `target/`
 
 ## Building docker image
 
-`docker build --platform=linux/amd64 -t mbocsi/springapi` or whatever platform you want to deploy to
+`docker build --platform linux/amd64 -t mbocsi/springapi .` or whatever platform you want to deploy to
 mbocsi/springapi is just the name of the image.
 
 ## Running the docker container
