@@ -2,14 +2,12 @@ package com.example.springAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/listings")
@@ -36,6 +34,18 @@ public class ListingsController {
         return new ResponseEntity<>(response, responseHeaders, HttpStatus.OK);
     }
 
+    @PostMapping("")
+    public ResponseEntity<ListingResponse> newListing(@RequestBody Listing listing) {
+        Random rand = new Random();
+        int id = rand.nextInt(10000);
+        Listing newListing = new Listing(id, listing.userId(), listing.name(), listing.askingPrice());
+        this.data.add(newListing);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
+        return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.CREATED);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ListingResponse> listing(@PathVariable("id") long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -45,6 +55,37 @@ public class ListingsController {
                 return new ResponseEntity<>(new ListingResponse(true, l), responseHeaders, HttpStatus.OK);
             }
         }
+        return new ResponseEntity<>(responseHeaders, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ListingResponse> replaceListing(@RequestBody Listing listing, @PathVariable long id) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
+        Listing newListing = new Listing(id, listing.userId(), listing.name(), listing.askingPrice());
+
+        for(int i = 0; i < this.data.size(); i++) {
+            if(this.data.get(i).id() == id) {
+                this.data.set(i, newListing);
+                return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.OK);
+            }
+        }
+        this.data.add(newListing);
+        return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteListing(@PathVariable long id) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
+
+        for(int i = 0; i < this.data.size(); i++) {
+            if(this.data.get(i).id() == id){
+                this.data.remove(i);
+                return new ResponseEntity<>(responseHeaders, HttpStatus.NO_CONTENT);
+            }
+        }
+
         return new ResponseEntity<>(responseHeaders, HttpStatus.NOT_FOUND);
     }
 }
