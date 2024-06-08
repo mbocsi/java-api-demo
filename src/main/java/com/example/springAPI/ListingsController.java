@@ -23,17 +23,18 @@ public class ListingsController {
         this.data.add(new Listing(2562, "user_9345643", "Plates", 12.5));
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("")
     public ResponseEntity<ListingsResponse> listings() {
         ListingsResponse response = new ListingsResponse();
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
         for(Listing listing: this.data) {
             response.appendListing(listing);
         }
         return new ResponseEntity<>(response, responseHeaders, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("")
     public ResponseEntity<ListingResponse> newListing(@RequestBody Listing listing) {
         Random rand = new Random();
@@ -42,14 +43,13 @@ public class ListingsController {
         this.data.add(newListing);
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
         return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     public ResponseEntity<ListingResponse> listing(@PathVariable("id") long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
         for(Listing l: this.data){
             if(l.id() == id) {
                 return new ResponseEntity<>(new ListingResponse(true, l), responseHeaders, HttpStatus.OK);
@@ -58,10 +58,10 @@ public class ListingsController {
         return new ResponseEntity<>(responseHeaders, HttpStatus.NOT_FOUND);
     }
 
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     public ResponseEntity<ListingResponse> replaceListing(@RequestBody Listing listing, @PathVariable long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
         Listing newListing = new Listing(id, listing.userId(), listing.name(), listing.askingPrice());
 
         for(int i = 0; i < this.data.size(); i++) {
@@ -74,10 +74,10 @@ public class ListingsController {
         return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteListing(@PathVariable long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Access-Control-Allow-Origin", "*"); // Temporary for local development
 
         for(int i = 0; i < this.data.size(); i++) {
             if(this.data.get(i).id() == id){
