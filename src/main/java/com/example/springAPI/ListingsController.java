@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/listings")
 public class ListingsController {
@@ -23,7 +24,6 @@ public class ListingsController {
         this.data.add(new Listing(2562, "user_9345643", "Plates", 12.5));
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("")
     public ResponseEntity<ListingsResponse> listings() {
         ListingsResponse response = new ListingsResponse();
@@ -34,7 +34,6 @@ public class ListingsController {
         return new ResponseEntity<>(response, responseHeaders, HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("")
     public ResponseEntity<ListingResponse> newListing(@RequestBody Listing listing) {
         Random rand = new Random();
@@ -46,7 +45,6 @@ public class ListingsController {
         return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     public ResponseEntity<ListingResponse> listing(@PathVariable("id") long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -58,7 +56,6 @@ public class ListingsController {
         return new ResponseEntity<>(responseHeaders, HttpStatus.NOT_FOUND);
     }
 
-    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     public ResponseEntity<ListingResponse> replaceListing(@RequestBody Listing listing, @PathVariable long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -74,7 +71,6 @@ public class ListingsController {
         return new ResponseEntity<>(new ListingResponse(true, newListing), responseHeaders, HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteListing(@PathVariable long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
